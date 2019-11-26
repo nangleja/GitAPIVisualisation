@@ -31,3 +31,5 @@ gitDF = jsonlite::fromJSON(jsonlite::toJSON(json1))
 
 # Subset data.frame
 gitDF[gitDF$full_name == "jtleek/datasharing", "created_at"] 
+
+#test for git commit
