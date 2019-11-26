@@ -1,20 +1,12 @@
-#install.packages("jsonlite")
-library(jsonlite)
-#install.packages("httpuv")
-library(httpuv)
-#install.packages("httr")
-library(httr)
+#-------------------------------------------------------
+#James Nangle - 17338145 - Software Engineering Project#
+#-------------------------------------------------------
 
-# Can be github, linkedin etc depending on application
-oauth_endpoints("github")
+#-------------------------------------------------------
+# Interfacing With the Github API
+#-------------------------------------------------------
 
-# Change based on what you 
-myapp <- oauth_app(appname = "NangleJaSoftEng",
-                   key = "c4e657e501f69c7a1db5",
-                   secret = "d9b686cbc5aa3bde6046b8758a63c58b8dde6a65")
-
-# Get OAuth credentials
-github_token <- oauth2.0_token(oauth_endpoints("github"), myapp)
+1
 
 # Use API
 gtoken <- config(token = github_token)
@@ -32,4 +24,16 @@ gitDF = jsonlite::fromJSON(jsonlite::toJSON(json1))
 # Subset data.frame
 gitDF[gitDF$full_name == "jtleek/datasharing", "created_at"] 
 
-#test for git commit
+# Code sourced from https://towardsdatascience.com/accessing-data-from-github-api-using-r-3633fb62cb08 tutorial.
+
+userData = fromJSON("https://api.github.com/users/nangleja")
+
+#-------------------------------------------------------
+# Interrogating the results
+#-------------------------------------------------------
+
+userData$followers
+
+myFollowers = fromJSON("https://api.github.com/users/nangleja/followers")
+
+myFollowers$login
