@@ -82,11 +82,12 @@ extract = content(johnData)
 githubDB = jsonlite::fromJSON(jsonlite::toJSON(extract))
 githubDB$login
 
-# Retrieve a list of usernames
+# List of usernames
 id = githubDB$login
 user_ids = c(id)
+user_ids
 
-#Creates Users dataframe
+# Creates dataframe of users
 users = c()
 usersDB = data.frame(
   username = integer(),
@@ -166,14 +167,15 @@ plot1
 plot2 = plot_ly(data = usersDB, x = ~following, y = ~followers, text = ~paste("Followers: ", followers, "<br>Following: ", following), color = ~dateCreated, colors = "Set3")
 plot2
 
-api_create(plot1, filename = "Repositories vs Followers")
-api_create(plot2, filename = "Following vs Followers")
+api_create(plot1, filename = "GitHub API - Repositories vs Followers for 100 users")
+api_create(plot2, filename = "GitHub API - Following vs Followers for 100 users")
 
 #-----------------------------------------------------------------------
 # Top languages research
 #-----------------------------------------------------------------------
 
 languages = c()
+#Scraping the followers of Johno and researching the most common languages used.
 
 for (i in 1:length(users))
 {
@@ -184,8 +186,16 @@ for (i in 1:length(users))
   RepositoriesNames = RepositoriesDF$name
   
   #Loop through all the repositories of an individual user
-  for (j in 1: length(RepositoriesNames))
+  if(length(RepositoriesNames) < 10){
+    reps = length(RepositoriesNames)
+  }
+  else{
+    reps = 10
+  }
+  
+  for (j in 1: reps)
   {
+    
     #Find all repositories and save in data frame
     RepositoriesUrl2 = paste("https://api.github.com/repos/", users[i], "/", RepositoriesNames[j], sep = "")
     Repositories2 = GET(RepositoriesUrl2, gtoken)
@@ -203,9 +213,9 @@ for (i in 1:length(users))
   next
 }
 
-#Puts 10 most popular languages in table 
+#Puts the most popular languages in table: 
 allLanguages = sort(table(languages), increasing=TRUE)
-top10Languages = allLanguages[(length(allLanguages)-9):length(allLanguages)]
+top10Languages = allLanguages[(length(allLanguages)-19):length(allLanguages)]
 
 #converts to dataframe
 languageDF = as.data.frame(top10Languages)
@@ -215,4 +225,5 @@ plot3 = plot_ly(data = languageDF, x = languageDF$languages, y = languageDF$Freq
 plot3
 
 
+api_create(plot3, filename = "20 Most Popular Languages")
 
